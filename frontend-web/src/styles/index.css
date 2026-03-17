@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #101217;
+  --bg-soft: #131723;
+  --card: #1a1d24;
+  --card-border: rgba(255, 255, 255, 0.05);
+  --text: #e6e9f2;
+  --muted: #8a8f9e;
+  --accent: #5d5fef;
+  --accent-glow: rgba(93, 95, 239, 0.6);
+  color-scheme: dark;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+:root[data-theme="light"] {
+  --bg: #f3f4f8;
+  --bg-soft: #e9edf5;
+  --card: #ffffff;
+  --card-border: rgba(15, 23, 42, 0.08);
+  --text: #0f172a;
+  --muted: #6b7280;
+  --accent: #5d5fef;
+  --accent-glow: rgba(93, 95, 239, 0.4);
+  color-scheme: light;
+}
+
+body {
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.background-grid {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(circle at 40% 40%, rgba(0, 0, 0, 0.6), transparent 70%);
+}
+
+.glass-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(12px);
+}
+
+.card-shadow {
+  box-shadow: 0 18px 40px rgba(2, 6, 23, 0.45);
+}
+
+.btn-ghost {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text);
+  background: transparent;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  background: rgba(93, 95, 239, 0.12);
+}
+
+.btn-action {
+  background: var(--accent);
+  color: #ffffff;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.btn-action.loading {
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.pulse-glow {
+  animation: pulseGlow 1.4s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+  50% {
+    box-shadow: 0 0 22px var(--accent-glow);
+  }
+}
+
+.image-fade {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.12) 40%,
+    rgba(255, 255, 255, 0.04) 80%
+  );
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.footer-fixed {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #8a8f9e;
+}
