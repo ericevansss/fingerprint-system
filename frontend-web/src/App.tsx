@@ -7,12 +7,6 @@ import MetricCard from "./components/MetricCard";
 import TopBar from "./components/TopBar";
 import UploadCard from "./components/UploadCard";
 
-interface MinutiaePoint {
-  x: number;
-  y: number;
-  kind: "ending" | "bifurcation";
-}
-
 interface ApiResponse {
   fingerprint_type?: string;
   confidence?: number;
@@ -25,11 +19,13 @@ interface ApiResponse {
     skeleton?: string;
     binary?: string;
   };
+  original_image?: string;
   enhanced_image?: string;
   skeleton_image?: string;
   ridge_map_image?: string;
+  visualization_image?: string;
   processing_time?: string;
-  minutiae_points?: { x: number; y: number }[];
+  minutiae_points?: { x: number; y: number; kind?: "ending" | "bifurcation" }[];
 }
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
@@ -49,14 +45,6 @@ function base64ToDataUrl(value?: string): string | undefined {
   return `data:image/png;base64,${value}`;
 }
 
-function generateMockPoints(count = 16): MinutiaePoint[] {
-  return Array.from({ length: count }).map((_, index) => ({
-    x: 30 + Math.random() * 190,
-    y: 30 + Math.random() * 190,
-    kind: index % 2 === 0 ? "ending" : "bifurcation"
-  }));
-}
-
 export default function App() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
@@ -64,7 +52,6 @@ export default function App() {
   const [status, setStatus] = useState("等待上传指纹图像");
   const [response, setResponse] = useState<ApiResponse | null>(null);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [minutiaePoints, setMinutiaePoints] = useState<MinutiaePoint[]>([]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -81,7 +68,12 @@ export default function App() {
   const images = useMemo(() => {
     const imagesFromApi = response?.images || {};
     return {
-      original: normalizeImageUrl(imagesFromApi.original) || preview || undefined,
+      original:
+        normalizeImageUrl(imagesFromApi.original) ||
+        base64ToDataUrl(response?.visualization_image) ||
+        base64ToDataUrl(response?.original_image) ||
+        preview ||
+        undefined,
       enhanced:
         normalizeImageUrl(imagesFromApi.enhanced) ||
         base64ToDataUrl(response?.enhanced_image),
@@ -98,7 +90,6 @@ export default function App() {
     setFile(selected);
     setResponse(null);
     setStatus("已选择图像，可开始分析");
-    setMinutiaePoints([]);
     const url = URL.createObjectURL(selected);
     setPreview(url);
   };
@@ -124,17 +115,6 @@ export default function App() {
 
       const data = (await res.json()) as ApiResponse;
       setResponse(data);
-      if (data.minutiae_points && data.minutiae_points.length > 0) {
-        setMinutiaePoints(
-          data.minutiae_points.map((point, index) => ({
-            x: point.x,
-            y: point.y,
-            kind: index % 2 === 0 ? "ending" : "bifurcation"
-          }))
-        );
-      } else {
-        setMinutiaePoints(generateMockPoints());
-      }
       setStatus("分析完成");
     } catch (error) {
       const message = error instanceof Error ? error.message : "分析失败";
@@ -201,11 +181,10 @@ export default function App() {
             </section>
 
             <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <ImageCard title="原始指纹" image={images.original} />
+              <ImageCard title="Core-Delta Ridge Analysis" image={images.original} />
               <ImageCard
-                title="增强结果 + 细节点"
+                title="方向场"
                 image={images.enhanced}
-                overlayPoints={minutiaePoints}
                 isLoading={loading}
               />
               <ImageCard

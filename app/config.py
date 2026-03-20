@@ -4,6 +4,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 WEIGHTS_DIR = PROJECT_ROOT / "weights"
 FINGERNET_WEIGHTS_PATH = WEIGHTS_DIR / "fingernet.pth"
+RESNET_WEIGHTS_PATH = WEIGHTS_DIR / "resnet18_fingerprint.pth"
 
 # Model input size (width, height)
 IMAGE_SIZE = (256, 256)

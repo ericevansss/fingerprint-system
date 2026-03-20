@@ -20,7 +20,7 @@ export default function ImageCard({ title, image, isLoading, overlayPoints }: Im
       className="glass-card rounded-2xl p-4 transition-all card-shadow"
     >
       <div className="text-sm text-[var(--muted)] mb-3">{title}</div>
-      <div className="relative aspect-[4/3] rounded-xl bg-[#0a1222] border border-white/5 overflow-hidden">
+      <div className="relative rounded-xl bg-[#0a1222] border border-white/5 overflow-hidden h-[260px] flex items-center justify-center">
         {image ? (
           <motion.img
             key={image}
@@ -29,7 +29,7 @@ export default function ImageCard({ title, image, isLoading, overlayPoints }: Im
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="h-full w-full object-contain"
+            className="max-h-full max-w-full object-contain"
           />
         ) : (
           <div className="h-full w-full flex items-center justify-center text-xs text-[var(--muted)]">
@@ -49,16 +49,21 @@ export default function ImageCard({ title, image, isLoading, overlayPoints }: Im
                   key={`ending-${index}`}
                   cx={point.x}
                   cy={point.y}
-                  r={3}
-                  fill="#22c55e"
-                  stroke="#0b0f19"
-                  strokeWidth={0.8}
+                  r={6}
+                  fill="transparent"
+                  stroke="#22c55e"
+                  strokeWidth={2}
                 />
               ) : (
-                <g key={`bif-${index}`} stroke="#60a5fa" strokeWidth={1.4}>
-                  <line x1={point.x - 3} y1={point.y - 3} x2={point.x + 3} y2={point.y + 3} />
-                  <line x1={point.x - 3} y1={point.y + 3} x2={point.x + 3} y2={point.y - 3} />
-                </g>
+                <circle
+                  key={`bif-${index}`}
+                  cx={point.x}
+                  cy={point.y}
+                  r={6}
+                  fill="transparent"
+                  stroke="#ef4444"
+                  strokeWidth={2}
+                />
               )
             )}
           </svg>

@@ -11,8 +11,14 @@ class MinutiaePointSchema(BaseModel):
 
     x: int = Field(..., example=120)
     y: int = Field(..., example=80)
-    score: float = Field(..., example=0.87)
-    angle: float = Field(..., example=45.0)
+    kind: str = Field(..., example="ending")
+
+
+class PointSchema(BaseModel):
+    """Core/Delta point schema."""
+
+    x: int
+    y: int
 
 
 class FingerprintAnalyzeResponse(BaseModel):
@@ -25,6 +31,14 @@ class FingerprintAnalyzeResponse(BaseModel):
     minutiae_points: List[MinutiaePointSchema]
     processing_time: str = Field(..., example="0.38s")
 
+    core_point: Optional[PointSchema] = None
+    delta_point: Optional[PointSchema] = None
+
+    original_image: Optional[str] = Field(None, description="Base64-encoded PNG")
     enhanced_image: Optional[str] = Field(None, description="Base64-encoded PNG")
     skeleton_image: Optional[str] = Field(None, description="Base64-encoded PNG")
     ridge_map_image: Optional[str] = Field(None, description="Base64-encoded PNG")
+    visualization_image: Optional[str] = Field(None, description="Base64-encoded PNG")
+
+    core: Optional[List[int]] = None
+    delta: Optional[List[int]] = None
