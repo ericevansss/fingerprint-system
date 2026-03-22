@@ -19,8 +19,8 @@ export default function ImageCard({ title, image, isLoading, overlayPoints }: Im
       whileHover={{ y: -4, boxShadow: "0 12px 30px rgba(93,95,239,0.18)" }}
       className="glass-card rounded-2xl p-4 transition-all card-shadow"
     >
-      <div className="text-sm text-[var(--muted)] mb-3">{title}</div>
-      <div className="relative rounded-xl bg-[#0a1222] border border-white/5 overflow-hidden h-[260px] flex items-center justify-center">
+      <div className="text-sm text-[var(--muted)] mb-2">{title}</div>
+      <div className="relative rounded-xl image-frame overflow-hidden h-[200px] flex items-center justify-center">
         {image ? (
           <motion.img
             key={image}
@@ -29,11 +29,12 @@ export default function ImageCard({ title, image, isLoading, overlayPoints }: Im
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="max-h-full max-w-full object-contain"
+            className="h-full w-full object-contain"
           />
         ) : (
-          <div className="h-full w-full flex items-center justify-center text-xs text-[var(--muted)]">
-            暂无图像
+          <div className="h-full w-full flex flex-col items-center justify-center text-xs text-[var(--muted)] placeholder-gradient">
+            <div className="text-sm">等待分析结果</div>
+            <div className="mt-1 text-[11px] opacity-70">高保真可视化区域</div>
           </div>
         )}
 

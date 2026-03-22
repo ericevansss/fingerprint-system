@@ -5,7 +5,6 @@ interface UploadCardProps {
   file?: File | null;
   previewUrl?: string;
   isLoading: boolean;
-  statusText: string;
   onSelect: (file: File) => void;
   onAnalyze: () => void;
 }
@@ -14,7 +13,6 @@ export default function UploadCard({
   file,
   previewUrl,
   isLoading,
-  statusText,
   onSelect,
   onAnalyze
 }: UploadCardProps) {
@@ -48,7 +46,7 @@ export default function UploadCard({
   }, [handleFile]);
 
   return (
-    <div className="glass-card rounded-2xl p-6 card-shadow">
+    <div className="glass-card rounded-2xl p-5 card-shadow">
       <div className="text-sm text-[var(--muted)] mb-4">上传指纹图像</div>
 
       <div className="relative rounded-2xl border border-dashed border-white/10 bg-white/5 p-5 text-center">
@@ -72,26 +70,30 @@ export default function UploadCard({
           选择图像
         </motion.button>
 
-        {previewUrl && (
-          <div className="mt-5 rounded-2xl border border-white/10 bg-black/30 p-3">
-            <div className="relative h-36 w-full overflow-hidden rounded-xl bg-black/40">
+        <div className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-3">
+          <div className="relative h-28 w-full overflow-hidden rounded-xl bg-black/40 flex items-center justify-center">
+            {previewUrl ? (
               <img
                 src={previewUrl}
                 alt="preview"
                 className="h-full w-full object-contain image-fade"
               />
-              {isLoading && (
-                <motion.div
-                  className="absolute inset-x-0 h-10 bg-gradient-to-r from-transparent via-[#5D5FEF]/40 to-transparent"
-                  initial={{ y: 0 }}
-                  animate={{ y: [0, 120, 0] }}
-                  transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-                />
-              )}
-            </div>
-            <div className="mt-2 text-xs text-[var(--muted)] truncate">{file?.name}</div>
+            ) : (
+              <div className="text-xs text-[var(--muted)]">未选择图像</div>
+            )}
+            {isLoading && (
+              <motion.div
+                className="absolute inset-x-0 h-10 bg-gradient-to-r from-transparent via-[#5D5FEF]/40 to-transparent"
+                initial={{ y: 0 }}
+                animate={{ y: [0, 120, 0] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              />
+            )}
           </div>
-        )}
+          <div className="mt-2 text-xs text-[var(--muted)] truncate">
+            {file?.name || "请选择指纹图像"}
+          </div>
+        </div>
       </div>
 
       <motion.button
@@ -106,10 +108,9 @@ export default function UploadCard({
         {isLoading && (
           <span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
         )}
-        {isLoading ? "Analyzing..." : "开始分析"}
+        {isLoading ? "处理中" : "开始分析"}
       </motion.button>
 
-      <div className="mt-3 text-xs text-[var(--muted)]">{statusText}</div>
     </div>
   );
 }
